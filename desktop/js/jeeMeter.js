@@ -41,6 +41,7 @@ document.getElementById('sel_inputs')?.addEventListener('click', function(_event
     buttons: {
       confirm: {
         label: '<i class="fas fa-check"></i> {{Valider}}',
+        className: 'success',
         callback: {
           click: function(_event) {
             var inputs = []
@@ -62,6 +63,8 @@ document.getElementById('sel_inputs')?.addEventListener('click', function(_event
         }
       },
       cancel: {
+        label: '<i class="fas fa-times"></i> {{Annuler}}',
+        className: 'warning',
         callback: {
           click: function(_event) {
             _event.target.closest('#md_selInputs')._jeeDialog.destroy()
