@@ -38,7 +38,7 @@ class jeeMeter extends eqLogic {
       $listenerOCPP = (new listener)
         ->setClass(__CLASS__)
         ->setFunction('autoOCPP');
-      $listenerOCPP->addEvent('ocppTransaction::*');
+      $listenerOCPP->addEvent('ocpp_transaction::*');
       $listenerOCPP->save();
     }
   }
@@ -55,8 +55,8 @@ class jeeMeter extends eqLogic {
       $meter->save();
 
       $listener = $meter->getListener();
-      $listener->addEvent('ocppTransaction::' . $tagId)->save();
-      $listener->execute('ocppTransaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
+      $listener->addEvent('ocpp_transaction::' . $tagId)->save();
+      $listener->execute('ocpp_transaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
     }
   }
 
@@ -95,7 +95,7 @@ class jeeMeter extends eqLogic {
         return $meter->setConfiguration('inputs', $input)->save(true);
       }
       if ($_options['value'] == 'stop_transaction') {
-        listener::byId($_options['listener_id'])->emptyEvent()->addEvent('ocppTransaction::' . $meter->getConfiguration('tag_id'))->save();
+        listener::byId($_options['listener_id'])->emptyEvent()->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'))->save();
         $meter->updateIndexCmd($_options['object']->getOptions('meterStop'), strtotime($_options['datetime']), $input);
         return $meter->setConfiguration('inputs', array())->save(true);
       }
@@ -211,7 +211,7 @@ class jeeMeter extends eqLogic {
 
       $inputs = jeedom::fromHumanReadable($this->getConfiguration('inputs'));
       if ($meterType == 'ocpp') {
-        $listener->addEvent('ocppTransaction::' . $tagId);
+        $listener->addEvent('ocpp_transaction::' . $tagId);
         if (isset($inputs[0]) && is_object($cmd = cmd::byId(trim($inputs[0]['cmd'], '#'))) && $cmd->getEqType() == $meterType) {
           $inputs = $inputs[0];
           $listener->addEvent($inputs[0]['cmd']);
