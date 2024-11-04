@@ -46,9 +46,9 @@ class jeeMeter extends eqLogic {
   public static function autoOCPP($_options) {
     log::add(__CLASS__, 'debug', __FUNCTION__ . ' : ' . print_r($_options, true));
     $tagId = ocpp_transaction::byTransactionId($_options['object'])->getTagId();
-    $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId]);
+    $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId])[0];
     if (!is_object($meter) && config::byKey('autoOCPP', __CLASS__, 0) == 1) {
-      $meter = (new meter)
+      $meter = (new self)
         ->setName('OCPP ' . $tagId)
         ->setConfiguration('type', 'ocpp')
         ->setConfiguration('tag_id', $tagId);
@@ -69,15 +69,15 @@ class jeeMeter extends eqLogic {
     }
 
     $meterType = $meter->getConfiguration('type');
-    $input = $meter->getInput((int) $_options['event_id']);
+    $input = $meter->getInput($_options['event_id']);
 
     if ($meterType == 'custom') {
       if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
         return;
       }
     } else if ($meterType == 'ocpp') {
-      $transaction = ocpp_transaction::byTransactionId((int) $_options['object']);
-      if (!$input) {
+      if ($_options['value'] == 'start_transaction') {
+        $transaction = ocpp_transaction::byTransactionId($_options['object']);
         $input[0] = array(
           'last_val' => $transaction->getOptions('meterStart'),
           'last_ts' => strtotime($transaction->getStart()),
@@ -87,23 +87,37 @@ class jeeMeter extends eqLogic {
         if (is_object($ocppMeter) && is_object($ocppCmd = $ocppMeter->getCmd('info', 'Energy.Active.Import.Register::' . $transaction->getConnectorId()))) {
           $input[0]['cmd'] = '#' . $ocppCmd->getId() . '#';
         }
-      }
 
-      if ($_options['value'] == 'start_transaction') {
         if (isset($input[0]['cmd'])) {
-          listener::byId($_options['listener_id'])->addEvent($input[0]['cmd'])->save();
+          $listener = listener::byId($_options['listener_id']);
+          $listener->addEvent($input[0]['cmd']);
+          $listener->save();
         }
-
         return $meter->setConfiguration('inputs', $input)->save(true);
       }
+
       if ($_options['value'] == 'stop_transaction') {
         $listener = listener::byId($_options['listener_id']);
-        $listener->emptyEvent();
-        $listener->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'));
-        $listener->save();
-        $meter->updateIndexCmd($transaction->getOptions('meterStop'), strtotime($_options['datetime']), $input);
+        if (count($listener->getEvent()) > 1) {
+          $listener->emptyEvent();
+          $listener->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'));
+          $listener->save();
+        }
+
+        $input = (array) $meter->getConfiguration('inputs', array());
+        if (empty($input)) {
+          $transaction = ocpp_transaction::byTransactionId($_options['object']);
+          $input[0] = array(
+            'last_val' => $transaction->getOptions('meterStart'),
+            'last_ts' => strtotime($transaction->getStart()),
+            'unite' => 'Wh'
+          );
+        }
+
+        $meter->updateIndexCmd(ocpp_transaction::byTransactionId($_options['object'])->getOptions('meterStop'), strtotime($_options['datetime']), $input[0]);
         return $meter->setConfiguration('inputs', array())->save(true);
       }
+
       if (cmd::byId($_options['event_id'])->getUnite() == 'kWh') {
         $_options['value'] = $_options['value'] * 1000;
       }
@@ -293,7 +307,7 @@ class jeeMeter extends eqLogic {
     }
   }
 
-  private function getInput(int $_cmdId) {
+  private function getInput($_cmdId) {
     foreach ($this->getConfiguration('inputs') as $input) {
       if ($input['cmd'] == '#' . $_cmdId . '#') {
         return $input;
