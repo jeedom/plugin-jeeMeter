@@ -49,13 +49,15 @@ class jeeMeter extends eqLogic {
     $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId])[0];
     if (!is_object($meter) && config::byKey('autoOCPP', __CLASS__, 0) == 1) {
       $meter = (new self)
+        ->setEqType_name(__CLASS__)
         ->setName('OCPP ' . $tagId)
         ->setConfiguration('type', 'ocpp')
         ->setConfiguration('tag_id', $tagId);
       $meter->save();
 
       $listener = $meter->getListener();
-      $listener->addEvent('ocpp_transaction::' . $tagId)->save();
+      $listener->addEvent('ocpp_transaction::' . $tagId);
+      $listener->save();
       $listener->execute('ocpp_transaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
     }
   }
@@ -85,6 +87,7 @@ class jeeMeter extends eqLogic {
 
         return $meter->setConfiguration('inputs', $input)->save(true);
       }
+      return;
     }
 
     if ($_options['value'] == 'stop_transaction') {
