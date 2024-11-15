@@ -93,7 +93,7 @@ class jeeMeter extends eqLogic {
     if ($_options['value'] == 'stop_transaction') {
       $transaction = ocpp_transaction::byId($_options['object']);
       $input = (array) $meter->getConfiguration('inputs', array());
-      if (empty($input)) {
+      if (!isset($input[0]) || !is_array($input[0])) {
         $input[0] = array(
           'last_val' => $transaction->getOptions('meterStart'),
           'last_ts' => strtotime($transaction->getStart()),
