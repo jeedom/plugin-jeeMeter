@@ -56,6 +56,7 @@ class jeeMeter extends eqLogic {
       $meter->save();
 
       $listener = $meter->getListener();
+      $listener->emptyEvent();
       $listener->addEvent('ocpp_transaction::' . $tagId);
       $listener->save();
       $listener->execute('ocpp_transaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
@@ -73,25 +74,47 @@ class jeeMeter extends eqLogic {
     if ($_options['value'] == 'start_transaction') {
       $transaction = ocpp_transaction::byId($_options['object']);
       $ocppMeter = eqLogic::byLogicalId($transaction->getCpId(), 'ocpp');
-      if (is_object($ocppMeter) && is_object($ocppCmd = $ocppMeter->getCmd('info', 'Energy.Active.Import.Register::' . $transaction->getConnectorId()))) {
+      $connector = $transaction->getConnectorId();
+
+      if (is_object($ocppIndex = $ocppMeter->getCmd('info', 'Energy.Active.Import.Register::' . $connector))) {
         $input[0] = array(
           'last_val' => $transaction->getOptions('meterStart'),
           'last_ts' => strtotime($transaction->getStart()),
           'unite' => 'Wh',
-          'cmd' => '#' . $ocppCmd->getId() . '#'
+          'cmd' => '#' . $ocppIndex->getId() . '#'
         );
 
         $listener = listener::byId($_options['listener_id']);
         $listener->addEvent($input[0]['cmd']);
         $listener->save();
 
-        return $meter->setConfiguration('inputs', $input)->save(true);
+        $meter->setConfiguration('inputs', $input)->save(true);
       }
+
+      if (is_object($ocppPower = $ocppMeter->getCmd('info', 'Power.Active.Import::' . $connector))) {
+        $meter->updatePowerCmd($ocppPower->execCmd(), date('Y-m-d H:i:s'), $ocppPower->getUnite());
+        $listener = $meter->getListener('power');
+        $listener->addEvent($ocppPower->getId());
+        $listener->save();
+      }
+
       return;
     }
 
     if ($_options['value'] == 'stop_transaction') {
       $transaction = ocpp_transaction::byId($_options['object']);
+      $listener = listener::byId($_options['listener_id']);
+      if (count($listener->getEvent()) > 1) {
+        $listener->emptyEvent();
+        $listener->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'));
+        $listener->save();
+      }
+
+      $listener = $meter->getListener('power');
+      $listener->emptyEvent();
+      $listener->save();
+      $meter->updatePowerCmd(0, date('Y-m-d H:i:s'), 'W');
+
       $input = (array) $meter->getConfiguration('inputs', array());
       if (!isset($input[0]) || !is_array($input[0])) {
         $input[0] = array(
@@ -100,16 +123,10 @@ class jeeMeter extends eqLogic {
           'unite' => 'Wh'
         );
       }
-
-      $listener = listener::byId($_options['listener_id']);
-      if (count($listener->getEvent()) > 1) {
-        $listener->emptyEvent();
-        $listener->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'));
-        $listener->save();
-      }
-
       $meter->updateIndexCmd($transaction->getOptions('meterStop'), strtotime($_options['datetime']), $input[0]);
-      return $meter->setConfiguration('inputs', array())->save(true);
+      $meter->setConfiguration('inputs', array())->save(true);
+
+      return;
     }
 
     $meterType = $meter->getConfiguration('type');
@@ -120,7 +137,7 @@ class jeeMeter extends eqLogic {
         return;
       }
     } else if ($meterType == 'ocpp') {
-      if (cmd::byId($_options['event_id'])->getUnite() == 'kWh') {
+      if (trim(cmd::byId($_options['event_id'])->getUnite()) == 'kWh') {
         $_options['value'] = $_options['value'] * 1000;
       }
     }
@@ -201,13 +218,45 @@ class jeeMeter extends eqLogic {
     }
   }
 
+  public static function updatePower($_options) {
+    log::add(__CLASS__, 'debug', __FUNCTION__ . ' : ' . print_r($_options, true));
+    if (!is_object($meter = self::byId($_options['meter_id']))) {
+      listener::byId($_options['listener_id'])->remove();
+      log::add(__CLASS__, 'error', __('Compteur introuvable (ID)', __FILE__) . ' : ' . $_options['meter_id']);
+      return false;
+    }
+
+    $meterType = $meter->getConfiguration('type');
+    if ($meterType == 'custom') {
+      $input = $meter->getInput($_options['event_id']);
+      if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
+        return;
+      }
+      $unite = $input['unite'];
+    } else if ($meterType == 'ocpp') {
+      $unite = cmd::byId($_options['event_id'])->getUnite();
+    }
+
+    $meter->updatePowerCmd($_options['value'], $_options['datetime'], $unite);
+  }
+
+  private function updatePowerCmd($_value, $_datetime, $_unite) {
+    if (trim($_unite) == 'kW') {
+      $_value = $_value * 1000;
+    }
+
+    $this->getPowerCmd()->event($_value, $_datetime);
+  }
+
   public function preInsert() {
     $this->setIsEnable(1)
       ->setIsVisible(1)
       ->setCategory('energy', 1);
+
     if ($this->getConfiguration('type') == '') {
       $this->setConfiguration('type', 'default');
     }
+
     $tarif = config::byKey('default_tarif', __CLASS__);
     $this->setConfiguration('tarif', $tarif);
     if ($tarif == 'double') {
@@ -216,22 +265,29 @@ class jeeMeter extends eqLogic {
   }
 
   public function preUpdate() {
-    $listener = $this->getListener();
     if ($this->getIsEnable() == 1) {
-      $meterType = $this->getConfiguration('type');
-      $tagId = $this->getConfiguration('tag_id');
-
       if ($this->getConfiguration('tarif') == 'double' && $this->getConfiguration('switch_tarif') == '') {
         throw new Exception(__('La commande de bascule de tarification doit être renseignée', __FILE__));
       }
-      if (in_array($meterType, ['custom', 'ocpp']) && $tagId == '') {
-        throw new Exception(__("L'identifiant de l'utilisateur doit être renseigné", __FILE__));
+
+      $meterType = $this->getConfiguration('type');
+      $tagId = $this->getConfiguration('tag_id');
+
+      if (in_array($meterType, ['custom', 'ocpp'])) {
+        if (trim($tagId) == '') {
+          throw new Exception(__("L'identifiant de l'utilisateur doit être renseigné", __FILE__));
+        }
       }
 
       $this->getIndexCmd();
 
+      $listener = $this->getListener();
+      $listener->emptyEvent();
       $inputs = jeedom::fromHumanReadable($this->getConfiguration('inputs'));
+
       if ($meterType == 'ocpp') {
+        $this->getPowerCmd();
+
         $listener->addEvent('ocpp_transaction::' . $tagId);
         if (isset($inputs[0]) && is_object($cmd = cmd::byId(trim($inputs[0]['cmd'], '#'))) && $cmd->getEqType() == $meterType) {
           $inputs = $inputs[0];
@@ -240,6 +296,11 @@ class jeeMeter extends eqLogic {
           $inputs = array();
         }
       } else {
+        if ($meterType == 'custom') {
+          $powerListener = $this->getListener('power');
+          $powerListener->emptyEvent();
+        }
+
         foreach ($inputs as $i => $input) {
           if (is_object($cmd = cmd::byId(trim($input['cmd'], '#')))) {
             $listener->addEvent($cmd->getId());
@@ -247,34 +308,55 @@ class jeeMeter extends eqLogic {
               $inputs[$i]['last_val'] = floatval($cmd->execCmd());
               $inputs[$i]['last_ts'] = strtotime($cmd->getValueDate());
             }
+
+            if (isset($powerListener) && in_array($input['unite'], ['W', 'kW'])) {
+              $powerListener->addEvent($cmd->getId());
+            }
           }
         }
       }
       $this->setConfiguration('inputs', $inputs);
       $listener->save();
-    } else if ($listener->getId() != '') {
-      $listener->remove();
+
+      if (isset($powerListener)) {
+        if (!empty($powerListener->getEvent())) {
+          $this->getPowerCmd();
+        }
+        $powerListener->save();
+      }
+    } else {
+      $this->removeListeners();
     }
   }
 
   public function preRemove() {
-    $listener = $this->getListener();
-    if ($listener->getId() != '') {
-      $listener->remove();
-    }
+    $this->removeListeners();
   }
 
-  private function getListener(): object {
-    $listener = listener::byClassAndFunction(__CLASS__, 'updateIndex', ['meter_id' => $this->getId()]);
-    if (is_object($listener)) {
-      $listener->emptyEvent();
-    } else {
+  private function getListener(string $_type = 'index'): object {
+    $function = ($_type == 'power') ? 'updatePower' : 'updateIndex';
+    $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => $this->getId()]);
+    if (!is_object($listener)) {
       $listener = (new listener)
         ->setClass(__CLASS__)
-        ->setFunction('updateIndex')
+        ->setFunction($function)
         ->setOption('meter_id', $this->getId());
     }
     return $listener;
+  }
+
+  private function removeListeners() {
+    $functions = array('updateIndex');
+    if (in_array($this->getConfiguration('type'), ['custom', 'ocpp'])) {
+      array_push($functions, 'updatePower');
+    }
+
+    foreach ($functions as $function) {
+      $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => $this->getId()]);
+      if (is_object($listener)) {
+        $listener->remove();
+      }
+    }
   }
 
   private function getIndexCmd(string $_logicalId = null) {
@@ -292,7 +374,6 @@ class jeeMeter extends eqLogic {
           ->setType('info')
           ->setSubType('numeric')
           ->setUnite('kWh')
-          // ->setConfiguration('historizeRound', 3)
           ->setGeneric_type('CONSUMPTION')
           ->setTemplate('dashboard', 'tile')
           ->setTemplate('mobile', 'tile')
@@ -307,6 +388,28 @@ class jeeMeter extends eqLogic {
         return $cmd;
       }
     }
+  }
+
+  private function getPowerCmd() {
+    $cmd = $this->getCmd('info', 'power');
+    if (!is_object($cmd)) {
+      $cmd = (new jeeMeterCmd)
+        ->setLogicalId('power')
+        ->setEqLogic_id($this->getId())
+        ->setName(__('Puissance', __FILE__))
+        ->setType('info')
+        ->setSubType('numeric')
+        ->setUnite('W')
+        ->setGeneric_type('POWER')
+        ->setTemplate('dashboard', 'tile')
+        ->setTemplate('mobile', 'tile')
+        ->setDisplay('showStatsOndashboard', 0)
+        ->setDisplay('showStatsOnmobile', 0)
+        ->setIsVisible(1)
+        ->setIsHistorized(1);
+      $cmd->save();
+    }
+    return $cmd;
   }
 
   private function getInput($_cmdId) {
