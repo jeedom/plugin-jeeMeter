@@ -38,13 +38,23 @@ sendVarToJS([
 				<sup><i class="fas fa-question-circle" title="{{Commande donnant les données brutes}}"></i></sup>
 			</th>
 			<th>{{Unité}}
-				<sup><i class="fas fa-question-circle" title="{{Unité des données brutes}}"></i></sup>
+				<?php
+				if ($meterType != 'custom') {
+				?>
+					<sup><i class="fas fa-question-circle" title="{{Unité des données brutes}}"></i></sup>
+				<?php
+				} else {
+				?>
+					<sup><i class="fas fa-question-circle" title="{{Unité des données brutes}}<br>{{Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur}}"></i></sup>
+				<?php
+				}
+				?>
 			</th>
 			<?php
 			if ($meterType == 'custom') {
 			?>
 				<th>{{Identifiant}}
-					<sup><i class="fas fa-question-circle" title="{{Commande donnant l'identifiant de l'utilisateur'}}"></i></sup>
+					<sup><i class="fas fa-question-circle" title="{{Commande donnant l'identifiant de l'utilisateur}}"></i></sup>
 				</th>
 				<!-- <th>{{Etat}}
 					<sup><i class="fas fa-question-circle" title="{{Commande donnant l'état de l'équipement}}"></i></sup>
@@ -88,8 +98,7 @@ sendVarToJS([
 	})
 
 	function addInput(_input) {
-		var tr = '<tr>'
-		tr += '<td>'
+		var tr = '<td>'
 		tr += '<div class="input-group">'
 		tr += '<input type="text" class="inputAttr form-control roundedLeft" data-l1key="cmd" placeholder="{{Commande info/numérique}}">'
 		tr += '<span class="input-group-btn">'
@@ -135,7 +144,6 @@ sendVarToJS([
 		tr += '<td>'
 		tr += '<button class="btn btn-sm btn-danger pull-right removeInput" title="Supprimer l\'entrée"><i class="fas fa-minus-circle"></i></button>'
 		tr += '</td>'
-		tr += '</tr>'
 
 		let newRow = document.createElement('tr')
 		newRow.innerHTML = tr
