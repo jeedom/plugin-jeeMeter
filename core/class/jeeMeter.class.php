@@ -134,7 +134,7 @@ class jeeMeter extends eqLogic {
 
     if ($meterType == 'custom') {
       if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
-        return;
+        return false;
       }
     } else if ($meterType == 'ocpp') {
       if (trim(cmd::byId($_options['event_id'])->getUnite()) == 'kWh') {
@@ -230,11 +230,14 @@ class jeeMeter extends eqLogic {
     if ($meterType == 'custom') {
       $input = $meter->getInput($_options['event_id']);
       if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
-        return;
+        return false;
       }
       $unite = $input['unite'];
     } else if ($meterType == 'ocpp') {
       $unite = cmd::byId($_options['event_id'])->getUnite();
+    } else {
+      listener::byId($_options['listener_id'])->remove();
+      return false;
     }
 
     $meter->updatePowerCmd($_options['value'], $_options['datetime'], $unite);
