@@ -20,6 +20,7 @@
         "Commande donnant les données brutes": "Befehl, der Rohdaten liefert",
         "Unité": "Einheit",
         "Unité des données brutes": "Rohdateneinheit",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur",
         "Identifiant": "Kennung",
         "Commande donnant l'identifiant de l'utilisateur": "Befehl zur Angabe der Benutzer-ID",
         "Etat": "Zustand",
@@ -105,7 +106,8 @@
         "L'identifiant de l'utilisateur doit être renseigné": "Die Benutzer-ID muss eingegeben werden",
         "Index": "Index",
         "Index heures pleines": "Spitzenstundenindex",
-        "Index heures creuses": "Index der Stunden außerhalb der Hauptverkehrszeiten"
+        "Index heures creuses": "Index der Stunden außerhalb der Hauptverkehrszeiten",
+        "Puissance": "Puissance"
     },
     "info.json": {
         "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Erstellen Sie maßgeschneiderte Energiezähler (Einzeltarif oder Spitzen-\/Nebenzeiten) aus Rohindizes (Wh\/kWh) und\/oder Leistungen (W\/kW). Ermöglicht Ihnen außerdem das Erstellen von Zählern pro Benutzer (Benutzerdefiniert\/OCPP)"

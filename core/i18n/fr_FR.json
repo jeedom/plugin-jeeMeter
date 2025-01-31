@@ -20,6 +20,7 @@
         "Commande donnant les données brutes": "Commande donnant les données brutes",
         "Unité": "Unité",
         "Unité des données brutes": "Unité des données brutes",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur",
         "Identifiant": "Identifiant",
         "Commande donnant l'identifiant de l'utilisateur": "Commande donnant l'identifiant de l'utilisateur",
         "Etat": "Etat",
@@ -105,7 +106,8 @@
         "L'identifiant de l'utilisateur doit être renseigné": "L'identifiant de l'utilisateur doit être renseigné",
         "Index": "Index",
         "Index heures pleines": "Index heures pleines",
-        "Index heures creuses": "Index heures creuses"
+        "Index heures creuses": "Index heures creuses",
+        "Puissance": "Puissance"
     },
     "info.json": {
         "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP)."

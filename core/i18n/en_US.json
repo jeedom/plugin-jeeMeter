@@ -20,6 +20,7 @@
         "Commande donnant les données brutes": "Command giving raw data",
         "Unité": "Unit",
         "Unité des données brutes": "Raw Data Unit",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur",
         "Identifiant": "Identifier",
         "Commande donnant l'identifiant de l'utilisateur": "Command giving the user ID",
         "Etat": "State",
@@ -105,7 +106,8 @@
         "L'identifiant de l'utilisateur doit être renseigné": "The user ID must be filled in",
         "Index": "Index",
         "Index heures pleines": "Full hour index",
-        "Index heures creuses": "Off-peak hours index"
+        "Index heures creuses": "Off-peak hours index",
+        "Puissance": "Puissance"
     },
     "info.json": {
         "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Create custom energy meters (single rate or peak\/off-peak hours) from raw indexes (Wh\/kWh) and\/or powers (W\/kW). Also allows you to create meters per user (Custom\/OCPP)"

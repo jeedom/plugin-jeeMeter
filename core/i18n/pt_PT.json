@@ -20,6 +20,7 @@
         "Commande donnant les données brutes": "Comando fornecendo dados brutos",
         "Unité": "Unidade",
         "Unité des données brutes": "Unidade de dados brutos",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur",
         "Identifiant": "Identificador",
         "Commande donnant l'identifiant de l'utilisateur": "Comando fornecendo ID do usuário",
         "Etat": "Estado",
@@ -105,7 +106,8 @@
         "L'identifiant de l'utilisateur doit être renseigné": "O ID do usuário deve ser inserido",
         "Index": "Índice",
         "Index heures pleines": "Índice de horário de pico",
-        "Index heures creuses": "Índice de horário fora de pico"
+        "Index heures creuses": "Índice de horário fora de pico",
+        "Puissance": "Puissance"
     },
     "info.json": {
         "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Crie medidores de energia sob medida (tarifa única ou horários de pico\/fora de pico) a partir de índices brutos (Wh\/kWh) e\/ou potências (W\/kW). Também permite criar contadores por usuário (Custom\/OCPP)"
