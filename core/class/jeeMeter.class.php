@@ -19,6 +19,22 @@ require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class jeeMeter extends eqLogic {
 
+  private static function createOCPPMeter(string $_tagId) {
+    log::add(__CLASS__, 'debug', __('Création du compteur OCPP', __FILE__) . ' : ' . $_tagId);
+    $meter = (new self)
+      ->setEqType_name(__CLASS__)
+      ->setName('OCPP ' . $_tagId)
+      ->setConfiguration('type', 'ocpp')
+      ->setConfiguration('tag_id', $_tagId);
+    $meter->save();
+
+    $listener = $meter->getListener();
+    $listener->emptyEvent();
+    $listener->addEvent('ocpp_transaction::' . $_tagId);
+    $listener->save();
+    return $meter;
+  }
+
   public static function isPluginInstalled($_plugin): bool {
     try {
       plugin::byId($_plugin);
@@ -46,21 +62,30 @@ class jeeMeter extends eqLogic {
   public static function autoOCPP($_options) {
     log::add(__CLASS__, 'debug', __FUNCTION__ . ' : ' . print_r($_options, true));
     $tagId = ocpp_transaction::byId($_options['object'])->getTagId();
-    $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId])[0];
+    $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId]);
+    $meter = (isset($meter[0])) ? $meter[0] : '';
     if (!is_object($meter) && config::byKey('autoOCPP', __CLASS__, 0) == 1) {
-      $meter = (new self)
-        ->setEqType_name(__CLASS__)
-        ->setName('OCPP ' . $tagId)
-        ->setConfiguration('type', 'ocpp')
-        ->setConfiguration('tag_id', $tagId);
-      $meter->save();
-
-      $listener = $meter->getListener();
-      $listener->emptyEvent();
-      $listener->addEvent('ocpp_transaction::' . $tagId);
-      $listener->save();
-      $listener->execute('ocpp_transaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
+      $meter = self::createOCPPMeter($tagId);
+      $meter->getListener()->execute('ocpp_transaction::' . $tagId, $_options['value'], $_options['datetime'], $_options['object']);
     }
+  }
+
+  public static function createAllOCPPMeters() {
+    $count = 0;
+    $authGroups = (array) config::byKey('authGroups', 'ocpp', array());
+    foreach (array_keys($authGroups) as $authGroupId) {
+      $auths = ocpp::getAuthGroup($authGroupId);
+
+      foreach (array_keys($auths) as $tagId) {
+        $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId]);
+        $meter = (isset($meter[0])) ? $meter[0] : $meter;
+        if (!is_object($meter) && $auths[$tagId]['status'] == 'Accepted') {
+          $meter = self::createOCPPMeter($tagId);
+          $count++;
+        }
+      }
+    }
+    return $count;
   }
 
   public static function updateIndex($_options) {
@@ -111,7 +136,7 @@ class jeeMeter extends eqLogic {
       }
 
       $listener = $meter->getListener('power');
-      $listener->emptyEvent();
+      $listener->setEvent([]);
       $listener->save();
       $meter->updatePowerCmd(0, date('Y-m-d H:i:s'), 'W');
 
@@ -286,13 +311,13 @@ class jeeMeter extends eqLogic {
 
       $listener = $this->getListener();
       $listener->emptyEvent();
-      $inputs = jeedom::fromHumanReadable($this->getConfiguration('inputs'));
+      $inputs = jeedom::fromHumanReadable($this->getConfiguration('inputs', array()));
 
       if ($meterType == 'ocpp') {
         $this->getPowerCmd();
 
         $listener->addEvent('ocpp_transaction::' . $tagId);
-        if (isset($inputs[0]) && is_object($cmd = cmd::byId(trim($inputs[0]['cmd'], '#'))) && $cmd->getEqType() == $meterType) {
+        if (isset($inputs[0]) /*&& is_object($cmd = cmd::byId(trim($inputs[0]['cmd'], '#'))) && $cmd->getEqType() == $meterType*/) {
           $inputs = $inputs[0];
           $listener->addEvent($inputs[0]['cmd']);
         } else {
@@ -338,7 +363,7 @@ class jeeMeter extends eqLogic {
 
   private function getListener(string $_type = 'index'): object {
     $function = ($_type == 'power') ? 'updatePower' : 'updateIndex';
-    $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => $this->getId()]);
+    $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => (string) $this->getId()]);
     if (!is_object($listener)) {
       $listener = (new listener)
         ->setClass(__CLASS__)
@@ -348,14 +373,16 @@ class jeeMeter extends eqLogic {
     return $listener;
   }
 
-  private function removeListeners() {
+  public function removeListeners() {
     $functions = array('updateIndex');
     if (in_array($this->getConfiguration('type'), ['custom', 'ocpp'])) {
       array_push($functions, 'updatePower');
     }
 
+    log::add(__CLASS__, 'debug', $this->getHumanName() . ' : ' . $this->getId());
     foreach ($functions as $function) {
-      $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => $this->getId()]);
+      $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => (string) $this->getId()]);
+      log::add(__CLASS__, 'debug', $this->getHumanName() . ' : ' . print_r($listener, true));
       if (is_object($listener)) {
         $listener->remove();
       }

@@ -31,6 +31,34 @@ function saveEqLogic(_eqLogic) {
   return _eqLogic
 }
 
+document.querySelector('.eqLogicAction[data-action="createOCPPMeters"]')?.addEventListener('click', function(_event) {
+  _event.preventDefault()
+  domUtils.ajax({
+    type: 'POST',
+    url: 'plugins/jeeMeter/core/ajax/jeeMeter.ajax.php',
+    data: {
+      action: 'createOCPPMeters'
+    },
+    dataType: 'json',
+    error: function(error) {
+      jeedomUtils.showAlert({
+        message: error.message,
+        level: 'danger'
+      })
+    },
+    success: function(data) {
+      let message = data.result + ' {{Compteurs OCPP créés}}'
+      if (data.result == 0) {
+        message = '{{Aucun compteur OCPP à créer}}'
+      }
+      jeedomUtils.showAlert({
+        message: message,
+        level: 'success'
+      })
+    }
+  })
+})
+
 document.getElementById('sel_inputs')?.addEventListener('click', function(_event) {
   _event.preventDefault()
 

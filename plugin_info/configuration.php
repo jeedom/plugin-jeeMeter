@@ -57,6 +57,7 @@ if (!isConnect()) {
           <label class="checkbox-inline"><input type="checkbox" class="configKey" data-l1key="autoOCPP">{{Création automatique des compteurs}}
             <sup><i class="fas fa-question-circle tooltips" title="{{Permet de comptabiliser les consommations de chaque utilisateur}}"></i></sup>
           </label>
+          <button class="btn btn-primary btn-sm eqLogicAction" data-action="createOCPPMeters" title="{{Forcer la création des compteurs}}"><i class="fas fa-redo-alt"></i> {{Forcer}}</button>
         </div>
       </div>
     <?php
