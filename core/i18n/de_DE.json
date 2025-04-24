@@ -10,7 +10,9 @@
         "OCPP": "OCPP",
         "Plugin OCPP détecté": "OCPP-Plugin erkannt",
         "Création automatique des compteurs": "Automatische Erstellung von Zählern",
-        "Permet de comptabiliser les consommations de chaque utilisateur": "Ermöglicht Ihnen, den Verbrauch jedes Benutzers zu zählen"
+        "Permet de comptabiliser les consommations de chaque utilisateur": "Ermöglicht Ihnen, den Verbrauch jedes Benutzers zu zählen",
+        "Forcer la création des compteurs": "Forcer la création des compteurs",
+        "Forcer": "Forcer"
     },
     "plugins\/jeeMeter\/desktop\/modal\/select.inputs.php": {
         "401 - Accès non autorisé": "401 – Unbefugter Zugriff",
@@ -87,6 +89,8 @@
         "Actions": "Aktionen"
     },
     "plugins\/jeeMeter\/desktop\/js\/jeeMeter.js": {
+        "Compteurs OCPP créés": "Compteurs OCPP créés",
+        "Aucun compteur OCPP à créer": "Aucun compteur OCPP à créer",
         "Données à traiter": "Zu verarbeitende Daten",
         "Valider": "Zur Validierung",
         "Annuler": "Stornieren",
@@ -98,7 +102,12 @@
         "Tester": "Prüfen",
         "Supprimer la commande": "Auftrag löschen"
     },
+    "plugins\/jeeMeter\/core\/ajax\/jeeMeter.ajax.php": {
+        "401 - Accès non autorisé": "401 - Accès non autorisé",
+        "Aucune méthode correspondante à": "Aucune méthode correspondante à"
+    },
     "plugins\/jeeMeter\/core\/class\/jeeMeter.class.php": {
+        "Création du compteur OCPP": "Création du compteur OCPP",
         "Compteur introuvable (ID)": "Zähler nicht gefunden (ID)",
         "Impossible de calculer l'index (unité inconnue)": "Index kann nicht berechnet werden (unbekannte Einheit)",
         "Calcul de l'index": "Indexberechnung",
