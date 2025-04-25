@@ -81,6 +81,8 @@ class jeeMeter extends eqLogic {
         $meter = (isset($meter[0])) ? $meter[0] : $meter;
         if (!is_object($meter) && $auths[$tagId]['status'] == 'Accepted') {
           $meter = self::createOCPPMeter($tagId);
+          $meter->getIndexCmd();
+          $meter->getPowerCmd();
           $count++;
         }
       }
@@ -202,7 +204,10 @@ class jeeMeter extends eqLogic {
     }
     log::add(__CLASS__, 'debug', $this->getHumanName() . ' ' . __("Calcul de l'index", __FILE__) . ' : ' . $indexCalcul);
 
-    $indexes = array();
+    $indexes['index'] = array(
+      'value' => $index,
+      'timestamp' => $_timestamp
+    );
     if ($this->getConfiguration('tarif') == 'double') {
       if (is_object($switchCmd = cmd::byId(trim($this->getConfiguration('switch_tarif'), '#')))) {
         $switchVal = $switchCmd->execCmd();
@@ -224,11 +229,6 @@ class jeeMeter extends eqLogic {
           );
         }
       }
-    } else {
-      $indexes['index'] = array(
-        'value' => $index,
-        'timestamp' => $_timestamp
-      );
     }
 
     foreach ($indexes as $logical => $index) {
@@ -392,7 +392,7 @@ class jeeMeter extends eqLogic {
   private function getIndexCmd(string $_logicalId = null) {
     $cmds = array(
       'simple' => ['index' => __('Index', __FILE__)],
-      'double' => ['indexHP' => __('Index heures pleines', __FILE__), 'indexHC' => __('Index heures creuses', __FILE__)]
+      'double' => ['indexHP' => __('Index heures pleines', __FILE__), 'indexHC' => __('Index heures creuses', __FILE__), 'index' => __('Index total', __FILE__)]
     );
     foreach ($cmds[$this->getConfiguration('tarif')] as $cmdLogical => $cmdName) {
       $cmd = $this->getCmd('info', $cmdLogical);

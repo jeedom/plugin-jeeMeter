@@ -9,6 +9,7 @@
 # 24/04/2025
 
 - Ajout d'un bouton permettant de forcer la création des compteurs OCPP *(page de configuration du plugin)*
+- Ajout d'une commande "Index total" pour les compteurs en tarification HP/HC
 
 # 30/01/2025
 
