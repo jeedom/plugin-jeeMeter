@@ -70,20 +70,22 @@ class jeeMeter extends eqLogic {
     }
   }
 
-  public static function createAllOCPPMeters() {
+  public static function createAllOCPPMeters(): int {
     $count = 0;
-    $authGroups = (array) config::byKey('authGroups', 'ocpp', array());
-    foreach (array_keys($authGroups) as $authGroupId) {
-      $auths = ocpp::getAuthGroup($authGroupId);
+    if (self::isPluginInstalled('ocpp')) {
+      $authGroups = (array) config::byKey('authGroups', 'ocpp', array());
+      foreach (array_keys($authGroups) as $authGroupId) {
+        $auths = ocpp::getAuthGroup($authGroupId);
 
-      foreach (array_keys($auths) as $tagId) {
-        $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId]);
-        $meter = (isset($meter[0])) ? $meter[0] : $meter;
-        if (!is_object($meter) && $auths[$tagId]['status'] == 'Accepted') {
-          $meter = self::createOCPPMeter($tagId);
-          $meter->getIndexCmd();
-          $meter->getPowerCmd();
-          $count++;
+        foreach (array_keys($auths) as $tagId) {
+          $meter = self::byTypeAndSearchConfiguration(__CLASS__, ['type' => 'ocpp', 'tag_id' => $tagId]);
+          $meter = (isset($meter[0])) ? $meter[0] : $meter;
+          if (!is_object($meter) && $auths[$tagId]['status'] == 'Accepted') {
+            $meter = self::createOCPPMeter($tagId);
+            $meter->getIndexCmd();
+            $meter->getPowerCmd();
+            $count++;
+          }
         }
       }
     }
@@ -379,10 +381,8 @@ class jeeMeter extends eqLogic {
       array_push($functions, 'updatePower');
     }
 
-    log::add(__CLASS__, 'debug', $this->getHumanName() . ' : ' . $this->getId());
     foreach ($functions as $function) {
       $listener = listener::byClassAndFunction(__CLASS__, $function, ['meter_id' => (string) $this->getId()]);
-      log::add(__CLASS__, 'debug', $this->getHumanName() . ' : ' . print_r($listener, true));
       if (is_object($listener)) {
         $listener->remove();
       }
