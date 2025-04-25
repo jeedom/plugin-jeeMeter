@@ -1,7 +1,6 @@
 {
     "changelog.md": {
         "Changelog Compteur virtuel": "Changelog Virtueller Zähler",
-        "Changelog plugin Compteur virtuel": "Changelog-Plugin Virtueller Zähler",
         "S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte": "Liegen keine Informationen zur Aktualisierung vor, bedeutet dies, dass es sich nur um die Aktualisierung der Dokumentation, Übersetzung oder des Textes handelt",
         "25\/04\/2025": "25\/04\/2025",
         "page de configuration du plugin": "page de configuration du plugin",
@@ -47,7 +46,7 @@
         "Configuration des équipements": "Gerätekonfiguration",
         "Pour ajouter un nouveau compteur virtuel, cliquer sur le bouton": "Um einen neuen virtuellen Zähler hinzuzufügen, klicken Sie auf die Schaltfläche",
         "Type de compteur": "Zählertyp",
-        "Standard\/Personnalisé\/OCPP": "",
+        "Standard\/Personnalisé\/OCPP": "Standard\/Personnalisé\/OCPP",
         "Sélectionner le type de compteur": "Wählen Sie den Zählertyp aus",
         "Adapter la tarification si nécessaire": "Passen Sie ggf. die Preise an",
         "En cas de tarification en heures pleines\/heures creuses, adapter la commande info\/binaire de bascule de tarification si nécessaire": "Passen Sie bei Spitzen-\/Nebenzeitenpreisen ggf. den Befehl zum Umschalten zwischen Info- und binärer Preisgestaltung an",

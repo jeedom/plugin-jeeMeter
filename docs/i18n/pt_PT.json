@@ -1,7 +1,6 @@
 {
     "changelog.md": {
         "Changelog Compteur virtuel": "Contador virtual de registro de alterações",
-        "Changelog plugin Compteur virtuel": "Plugin Changelog Contador virtual",
         "S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte": "Se não houver informação sobre a atualização, significa que se trata apenas de atualização de documentação, tradução ou texto",
         "25\/04\/2025": "25\/04\/2025",
         "page de configuration du plugin": "page de configuration du plugin",
@@ -47,7 +46,7 @@
         "Configuration des équipements": "Configuração do equipamento",
         "Pour ajouter un nouveau compteur virtuel, cliquer sur le bouton": "Para adicionar um novo contador virtual, clique no botão",
         "Type de compteur": "Tipo de medidor",
-        "Standard\/Personnalisé\/OCPP": "",
+        "Standard\/Personnalisé\/OCPP": "Standard\/Personnalisé\/OCPP",
         "Sélectionner le type de compteur": "Selecione o tipo de medidor",
         "Adapter la tarification si nécessaire": "Adapte os preços, se necessário",
         "En cas de tarification en heures pleines\/heures creuses, adapter la commande info\/binaire de bascule de tarification si nécessaire": "No caso de preços de pico\/fora de pico, adapte o comando de alternância de preços info\/binários, se necessário",
