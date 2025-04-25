@@ -17,9 +17,7 @@ Le plugin **Compteur virtuel** permet de créer des compteurs énergétiques en 
 - **OCPP**:
   - **Création automatique des compteurs**: Cocher la case pour créer automatiquement les compteurs par utilisateur pour toute nouvelle transaction OCPP.
 
-  >**INFORMATION**
-  >
-  >Le bouton **"Forcer"** permet de créer instantanément tous les compteurs OCPP des utilisateurs autorisés sans devoir attendre une transaction.
+  - **Forcer**: Crée instantanément tous les compteurs OCPP des utilisateurs autorisés sans devoir attendre une transaction.
 
 ## Configuration des équipements
 
