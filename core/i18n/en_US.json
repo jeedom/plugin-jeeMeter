@@ -116,6 +116,7 @@
         "Index": "Index",
         "Index heures pleines": "Full hour index",
         "Index heures creuses": "Off-peak hours index",
+        "Index total": "Index total",
         "Puissance": "Puissance"
     },
     "info.json": {
