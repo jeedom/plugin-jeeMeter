@@ -37,7 +37,8 @@
         "Puissance en kiloWatts": "Power in kilowatts",
         "Commande info\/autre": "Order info\/other",
         "Commande info\/binaire": "Info\/binary command",
-        "Commande action\/défaut": "Action\/default command"
+        "Commande action\/défaut": "Action\/default command",
+        "Supprimer l\\'entrée": "Supprimer l\\'entrée"
     },
     "plugins\/jeeMeter\/desktop\/php\/jeeMeter.php": {
         "401 - Accès non autorisé": "401 - Unauthorized Access",
@@ -78,7 +79,7 @@
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Info\/binary command defining the current pricing (1=peak hours\/0=off-peak hours)",
         "Commande info\/binaire de tarification": "Pricing info\/binary command",
         "Identifiant": "Identifier",
-        "Identifiant de l'utilisateur": "User ID",
+        "Identifiant transaction": "Identifiant transaction",
         "Données à traiter": "Data to be processed",
         "Commande(s)": "Order(s)",
         "Gérer les commandes": "Manage Orders",
@@ -120,6 +121,6 @@
         "Puissance": "Puissance"
     },
     "info.json": {
-        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Create custom energy meters (single rate or peak\/off-peak hours) from raw indexes (Wh\/kWh) and\/or powers (W\/kW). Also allows you to create meters per user (Custom\/OCPP)"
+        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP).": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP)"
     }
 }
