@@ -3,7 +3,7 @@
     "name": "Compteur virtuel",
     "pluginVersion": "1.0",
     "description": {
-        "fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).",
+        "fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP).",
         "en_US": "Create custom energy meters (single rate or peak\/off-peak hours) from raw indexes (Wh\/kWh) and\/or powers (W\/kW). Also allows you to create meters per user (Custom\/OCPP)",
         "es_ES": "Cree contadores de energía a medida (tarifa única u horas punta\/valle) a partir de índices brutos (Wh\/kWh) y\/o potencias (W\/kW). También permite crear contadores por usuario (Personalizado\/OCPP)",
         "de_DE": "Erstellen Sie maßgeschneiderte Energiezähler (Einzeltarif oder Spitzen-\/Nebenzeiten) aus Rohindizes (Wh\/kWh) und\/oder Leistungen (W\/kW). Ermöglicht Ihnen außerdem das Erstellen von Zählern pro Benutzer (Benutzerdefiniert\/OCPP)",
