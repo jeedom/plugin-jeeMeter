@@ -158,12 +158,11 @@ class jeeMeter extends eqLogic {
 
     $meterType = $meter->getConfiguration('type');
     $input = $meter->getInput($_options['event_id']);
+    if (!$input) {
+      return false;
+    }
 
-    if ($meterType == 'custom') {
-      if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
-        return false;
-      }
-    } else if ($meterType == 'ocpp') {
+    if ($meterType == 'ocpp') {
       if (trim(cmd::byId($_options['event_id'])->getUnite()) == 'kWh') {
         $_options['value'] = $_options['value'] * 1000;
       }
@@ -171,8 +170,14 @@ class jeeMeter extends eqLogic {
 
     $value = floatval($_options['value']);
     $timestamp = strtotime($_options['datetime']);
-    $meter->updateIndexCmd($value, $timestamp, $input);
     $meter->updateInput(['cmd' => $input['cmd'], 'last_val' => $value, 'last_ts' => $timestamp]);
+
+    if ($meterType == 'custom') {
+      if (!is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
+        return false;
+      }
+    }
+    $meter->updateIndexCmd($value, $timestamp, $input);
   }
 
   private function updateIndexCmd(float $_value, int $_timestamp, array $_input) {
