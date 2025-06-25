@@ -91,81 +91,77 @@ class jeeMeter extends eqLogic {
   }
 
   public static function updateIndex($_options) {
-    log::add(__CLASS__, 'debug', __FUNCTION__ . ' : ' . print_r($_options, true));
-    if (!is_object($meter = self::byId($_options['meter_id']))) {
-      log::add(__CLASS__, 'error', __('Compteur introuvable (ID)', __FILE__) . ' : ' . $_options['meter_id']);
+    $meter = self::byId($_options['meter_id']);
+    if (!is_object($meter)) {
+      log::add(__CLASS__, 'error', '[' . __FUNCTION__ . '] ' . __('Compteur introuvable (ID)', __FILE__) . ' : ' . $_options['meter_id']);
       listener::byId($_options['listener_id'])->remove();
       return false;
     }
-
-    if ($_options['value'] == 'start_transaction') {
-      $transaction = ocpp_transaction::byId($_options['object']);
-      $ocppMeter = eqLogic::byLogicalId($transaction->getCpId(), 'ocpp');
-      $connector = $transaction->getConnectorId();
-
-      if (is_object($ocppIndex = $ocppMeter->getCmd('info', 'Energy.Active.Import.Register::' . $connector))) {
-        $input[0] = array(
-          'last_val' => $transaction->getOptions('meterStart'),
-          'last_ts' => strtotime($transaction->getStart()),
-          'unite' => 'Wh',
-          'cmd' => '#' . $ocppIndex->getId() . '#'
-        );
-
-        $listener = listener::byId($_options['listener_id']);
-        $listener->addEvent($input[0]['cmd']);
-        $listener->save();
-
-        $meter->setConfiguration('inputs', $input)->save(true);
-      }
-
-      if (is_object($ocppPower = $ocppMeter->getCmd('info', 'Power.Active.Import::' . $connector))) {
-        $meter->updatePowerCmd($ocppPower->execCmd(), date('Y-m-d H:i:s'), $ocppPower->getUnite());
-        $listener = $meter->getListener('power');
-        $listener->addEvent($ocppPower->getId());
-        $listener->save();
-      }
-
-      return;
-    }
-
-    if ($_options['value'] == 'stop_transaction') {
-      $transaction = ocpp_transaction::byId($_options['object']);
-      $listener = listener::byId($_options['listener_id']);
-      if (count($listener->getEvent()) > 1) {
-        $listener->emptyEvent();
-        $listener->addEvent('ocpp_transaction::' . $meter->getConfiguration('tag_id'));
-        $listener->save();
-      }
-
-      $listener = $meter->getListener('power');
-      $listener->setEvent([]);
-      $listener->save();
-      $meter->updatePowerCmd(0, date('Y-m-d H:i:s'), 'W');
-
-      $input = (array) $meter->getConfiguration('inputs', array());
-      if (!isset($input[0]) || !is_array($input[0])) {
-        $input[0] = array(
-          'last_val' => $transaction->getOptions('meterStart'),
-          'last_ts' => strtotime($transaction->getStart()),
-          'unite' => 'Wh'
-        );
-      }
-      $meter->updateIndexCmd($transaction->getOptions('meterStop'), strtotime($_options['datetime']), $input[0]);
-      $meter->setConfiguration('inputs', array())->save(true);
-
-      return;
-    }
+    log::add(__CLASS__, 'debug', $meter->getHumanName() . '[' . __FUNCTION__ . '] : ' . print_r($_options, true));
 
     $meterType = $meter->getConfiguration('type');
+    if ($meterType == 'ocpp') {
+      if (is_numeric($_options['value'])) {
+        $cmd = cmd::byId($_options['event_id']);
+        if (is_object($cmd) && trim($cmd->getUnite()) == 'kWh') {
+          $_options['value'] = $_options['value'] * 1000;
+        }
+      } else {
+        $listener = listener::byId($_options['listener_id']);
+        $transaction = ocpp_transaction::byId($_options['object']);
+        $ocppMeter = eqLogic::byLogicalId($transaction->getCpId(), 'ocpp');
+        $connector = $transaction->getConnectorId();
+        $inputs = (array) $meter->getConfiguration('inputs', array());
+
+        if ($_options['value'] == 'start_transaction') {
+          if (is_object($ocppIndex = $ocppMeter->getCmd('info', 'Energy.Active.Import.Register::' . $connector))) {
+            $inputs[$transaction->getId()] = array(
+              'last_val' => $transaction->getOptions('meterStart'),
+              'last_ts' => strtotime($transaction->getStart()),
+              'unite' => 'Wh',
+              'cmd' => '#' . $ocppIndex->getId() . '#'
+            );
+            $meter->setConfiguration('inputs', $inputs)->save(true);
+
+            $listener->addEvent($ocppIndex->getId());
+            $listener->save();
+
+            if (is_object($ocppPower = $ocppMeter->getCmd('info', 'Power.Active.Import::' . $connector))) {
+              $powerListener = $meter->getListener('power');
+              $powerListener->addEvent($ocppPower->getId());
+              $powerListener->save();
+              $meter->updatePowerCmd($ocppPower->getId(), $ocppPower->execCmd(), $ocppPower->getCollectDate());
+            }
+          }
+
+          return;
+        } else if ($_options['value'] == 'stop_transaction') {
+          if (!isset($inputs[$transaction->getId()]) || !is_array($inputs[$transaction->getId()])) {
+            $inputs[$transaction->getId()] = array(
+              'last_val' => $transaction->getOptions('meterStart'),
+              'last_ts' => strtotime($transaction->getStart()),
+              'unite' => 'Wh'
+            );
+          } else {
+            $meter->removeListenerEvent($inputs[$transaction->getId()]['cmd'])->save();
+            if (is_object($ocppPower = $ocppMeter->getCmd('info', 'Power.Active.Import::' . $connector))) {
+              $meter->updatePowerCmd($ocppPower->getId(), 0, date('Y-m-d H:i:s'));
+              $meter->removeListenerEvent($ocppPower->getId(), 'power')->save();
+            }
+          }
+
+          $meter->updateIndexCmd($transaction->getOptions('meterStop'), strtotime($_options['datetime']), $inputs[$transaction->getId()]);
+          unset($inputs[$transaction->getId()]);
+          $meter->setConfiguration('inputs', $inputs)->save(true);
+
+          return;
+        }
+      }
+    }
+
     $input = $meter->getInput($_options['event_id']);
     if (!$input) {
       return false;
-    }
-
-    if ($meterType == 'ocpp') {
-      if (trim(cmd::byId($_options['event_id'])->getUnite()) == 'kWh') {
-        $_options['value'] = $_options['value'] * 1000;
-      }
     }
 
     $value = floatval($_options['value']);
@@ -249,36 +245,46 @@ class jeeMeter extends eqLogic {
   }
 
   public static function updatePower($_options) {
-    log::add(__CLASS__, 'debug', __FUNCTION__ . ' : ' . print_r($_options, true));
-    if (!is_object($meter = self::byId($_options['meter_id']))) {
-      listener::byId($_options['listener_id'])->remove();
-      log::add(__CLASS__, 'error', __('Compteur introuvable (ID)', __FILE__) . ' : ' . $_options['meter_id']);
-      return false;
-    }
-
-    $meterType = $meter->getConfiguration('type');
-    if ($meterType == 'custom') {
-      $input = $meter->getInput($_options['event_id']);
-      if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $meter->getConfiguration('tag_id')) {
-        return false;
-      }
-      $unite = $input['unite'];
-    } else if ($meterType == 'ocpp') {
-      $unite = cmd::byId($_options['event_id'])->getUnite();
-    } else {
+    $meter = self::byId($_options['meter_id']);
+    if (!is_object($meter)) {
+      log::add(__CLASS__, 'error', '[' . __FUNCTION__ . '] ' . __('Compteur introuvable (ID)', __FILE__) . ' : ' . $_options['meter_id']);
       listener::byId($_options['listener_id'])->remove();
       return false;
     }
-
-    $meter->updatePowerCmd($_options['value'], $_options['datetime'], $unite);
+    log::add(__CLASS__, 'debug', $meter->getHumanName() . '[' . __FUNCTION__ . '] : ' . print_r($_options, true));
+    $meter->updatePowerCmd($_options['event_id'], $_options['value'], $_options['datetime']);
   }
 
-  private function updatePowerCmd($_value, $_datetime, $_unite) {
-    if (trim($_unite) == 'kW') {
-      $_value = $_value * 1000;
+  private function updatePowerCmd($_powerId, $_value, $_datetime) {
+    $meterType = $this->getConfiguration('type');
+    $powerListener = $this->getListener('power');
+
+    if (!in_array($meterType, ['custom', 'ocpp'])) {
+      $powerListener->remove();
+      return false;
     }
 
-    $this->getPowerCmd()->event($_value, $_datetime);
+    $power = 0;
+
+    foreach ($powerListener->getEvent() as $powerEvent) {
+      $powerEvent = trim($powerEvent, '#');
+      if ($meterType == 'custom') {
+        $input = $this->getInput($powerEvent);
+        if (!$input || !is_object($tagCmd = cmd::byId(trim($input['tag_id'], '#'))) || $tagCmd->execCmd() != $this->getConfiguration('tag_id')) {
+          continue;
+        }
+        $value = ($powerEvent == $_powerId) ? $_value : cmd::byId($powerEvent)->execCmd();
+        $unite = $input['unite'];
+      } else if ($meterType == 'ocpp') {
+        $powerCmd = cmd::byId($powerEvent);
+        $value = ($powerEvent == $_powerId) ? $_value : $powerCmd->execCmd();
+        $unite = $powerCmd->getUnite();
+      }
+
+      $power += (trim($unite) == 'kW') ? $value * 1000 : $value;
+    }
+
+    $this->getPowerCmd()->event($power, $_datetime);
   }
 
   public function preInsert() {
@@ -322,11 +328,13 @@ class jeeMeter extends eqLogic {
         $this->getPowerCmd();
 
         $listener->addEvent('ocpp_transaction::' . $tagId);
-        if (isset($inputs[0]) /*&& is_object($cmd = cmd::byId(trim($inputs[0]['cmd'], '#'))) && $cmd->getEqType() == $meterType*/) {
-          $inputs = $inputs[0];
-          $listener->addEvent($inputs[0]['cmd']);
-        } else {
-          $inputs = array();
+        foreach ($inputs as $i => $input) {
+          $transaction = ocpp_transaction::byId($i);
+          if (is_object($transaction) && $transaction->getTagId() == $tagId) {
+            $listener->addEvent($input['cmd']);
+          } else {
+            unset($inputs[$i]);
+          }
         }
       } else {
         if ($meterType == 'custom') {
@@ -390,6 +398,17 @@ class jeeMeter extends eqLogic {
         $listener->remove();
       }
     }
+  }
+
+  private function removeListenerEvent($_id, string $_type = 'index'): object {
+    $listener = $this->getListener($_type);
+    $events = $listener->getEvent();
+    if (!is_array($events)) {
+      $events = array();
+    }
+    $id = trim($_id, '#');
+    $listener->setEvent(array_values(array_diff($events, ['#' . $id . '#'])));
+    return $listener;
   }
 
   private function getIndexCmd(string $_logicalId = null) {
