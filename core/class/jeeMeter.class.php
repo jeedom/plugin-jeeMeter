@@ -278,10 +278,10 @@ class jeeMeter extends eqLogic {
       } else if ($meterType == 'ocpp') {
         $powerCmd = cmd::byId($powerEvent);
         $value = ($powerEvent == $_powerId) ? $_value : $powerCmd->execCmd();
-        $unite = $powerCmd->getUnite();
+        $unite = trim($powerCmd->getUnite());
       }
 
-      $power += (trim($unite) == 'kW') ? $value * 1000 : $value;
+      $power += ($unite == 'kW') ? $value * 1000 : $value;
     }
 
     $this->getPowerCmd()->event($power, $_datetime);
