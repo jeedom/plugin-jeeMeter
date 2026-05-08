@@ -142,7 +142,7 @@ sendVarToJS([
 			// tr += '</td>'
 		}
 		tr += '<td>'
-		tr += '<button class="btn btn-sm btn-danger pull-right removeInput" title="Supprimer l\'entrée"><i class="fas fa-minus-circle"></i></button>'
+		tr += '<button class="btn btn-sm btn-danger pull-right removeInput" title="{{Supprimer l\'entrée}}"><i class="fas fa-minus-circle"></i></button>'
 		tr += '</td>'
 
 		let newRow = document.createElement('tr')

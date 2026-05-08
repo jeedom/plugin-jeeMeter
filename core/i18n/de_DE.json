@@ -37,7 +37,8 @@
         "Puissance en kiloWatts": "Leistung in Kilowatt",
         "Commande info\/autre": "Bestellinformationen\/Sonstiges",
         "Commande info\/binaire": "Info\/Binärbefehl",
-        "Commande action\/défaut": "Aktions-\/Fehlerbefehl"
+        "Commande action\/défaut": "Aktions-\/Fehlerbefehl",
+        "Supprimer l\\'entrée": "Supprimer l\\'entrée"
     },
     "plugins\/jeeMeter\/desktop\/php\/jeeMeter.php": {
         "401 - Accès non autorisé": "401 – Unbefugter Zugriff",
@@ -78,7 +79,7 @@
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Info\/Binärbefehl, der den aktuellen Preis definiert (1=Hauptverkehrszeiten\/0=Nebenverkehrszeiten)",
         "Commande info\/binaire de tarification": "Preisinformationen\/Binärbefehl",
         "Identifiant": "Kennung",
-        "Identifiant de l'utilisateur": "Benutzer-ID",
+        "Identifiant transaction": "Identifiant transaction",
         "Données à traiter": "Zu verarbeitende Daten",
         "Commande(s)": "Bestellung(en)",
         "Gérer les commandes": "Bestellungen verwalten",
@@ -120,6 +121,6 @@
         "Puissance": "Puissance"
     },
     "info.json": {
-        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Erstellen Sie maßgeschneiderte Energiezähler (Einzeltarif oder Spitzen-\/Nebenzeiten) aus Rohindizes (Wh\/kWh) und\/oder Leistungen (W\/kW). Ermöglicht Ihnen außerdem das Erstellen von Zählern pro Benutzer (Benutzerdefiniert\/OCPP)"
+        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP).": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP)"
     }
 }

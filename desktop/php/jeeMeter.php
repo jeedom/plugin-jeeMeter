@@ -157,10 +157,10 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 							<div class="form-group sel_type custom ocpp hidden">
 								<label class="col-sm-4 control-label">{{Identifiant}}
-									<sup><i class="fas fa-question-circle" title="{{Identifiant de l'utilisateur}}"></i></sup>
+									<sup><i class="fas fa-question-circle" title="{{Identifiant transaction}}"></i></sup>
 								</label>
 								<div class="col-sm-6">
-									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="tag_id" placeholder="{{Identifiant de l'utilisateur}}">
+									<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="tag_id" placeholder="{{Identifiant transaction}}">
 								</div>
 							</div>
 						</div>

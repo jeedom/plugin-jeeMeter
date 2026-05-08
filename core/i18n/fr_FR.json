@@ -37,7 +37,8 @@
         "Puissance en kiloWatts": "Puissance en kiloWatts",
         "Commande info\/autre": "Commande info\/autre",
         "Commande info\/binaire": "Commande info\/binaire",
-        "Commande action\/défaut": "Commande action\/défaut"
+        "Commande action\/défaut": "Commande action\/défaut",
+        "Supprimer l\\'entrée": "Supprimer l\\'entrée"
     },
     "plugins\/jeeMeter\/desktop\/php\/jeeMeter.php": {
         "401 - Accès non autorisé": "401 - Accès non autorisé",
@@ -78,7 +79,7 @@
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)",
         "Commande info\/binaire de tarification": "Commande info\/binaire de tarification",
         "Identifiant": "Identifiant",
-        "Identifiant de l'utilisateur": "Identifiant de l'utilisateur",
+        "Identifiant transaction": "Identifiant transaction",
         "Données à traiter": "Données à traiter",
         "Commande(s)": "Commande(s)",
         "Gérer les commandes": "Gérer les commandes",
@@ -120,6 +121,6 @@
         "Puissance": "Puissance"
     },
     "info.json": {
-        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP).": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs par utilisateur (Personnalisé\/OCPP)."
+        "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP).": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines\/heures creuses) à partir d'indexs bruts (Wh\/kWh) et\/ou de puissances (W\/kW). Permet également de créer des compteurs liés à une identification (Personnalisé\/OCPP)."
     }
 }
