@@ -3,12 +3,7 @@
 	"name": "Compteur virtuel",
 	"pluginVersion": "1.0.2",
 	"description": {
-		"fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP).",
-		"en_US": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)",
-		"es_ES": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)",
-		"de_DE": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)",
-		"it_IT": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)",
-		"pt_PT": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)"
+		"fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)."
 	},
 	"licence": "AGPL",
 	"author": "Jeedom SAS",
