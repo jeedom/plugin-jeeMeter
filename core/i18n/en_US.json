@@ -1,6 +1,7 @@
 {
     "plugins\/jeeMeter\/core\/ajax\/jeeMeter.ajax.php": {
-        "401 - Accès non autorisé": "401 - Unauthorized Access"
+        "401 - Accès non autorisé": "401 - Unauthorized Access",
+        "Aucune méthode correspondante à": "No matching methods found"
     },
     "plugins\/jeeMeter\/core\/class\/jeeMeter.class.php": {
         "Calcul de l'index": "Calculation of the index",
@@ -10,13 +11,17 @@
         "Index": "Index",
         "Index heures creuses": "Off-peak hours index",
         "Index heures pleines": "Full hour index",
+        "Index total": "Total index",
         "L'identifiant de l'utilisateur doit être renseigné": "The user ID must be filled in",
-        "La commande de bascule de tarification doit être renseignée": "The pricing switch command must be filled in"
+        "La commande de bascule de tarification doit être renseignée": "The pricing switch command must be filled in",
+        "Puissance": "Power"
     },
     "plugins\/jeeMeter\/desktop\/js\/jeeMeter.js": {
         "Afficher": "Display",
         "Annuler": "Cancel",
+        "Aucun compteur OCPP à créer": "No OCPP meters to create",
         "Choisir une icône": "Choose an icon",
+        "Compteurs OCPP créés": "OCPP meters created",
         "Données à traiter": "Data to be processed",
         "Historiser": "Historicize",
         "Nom de la commande": "Order Name",
@@ -46,6 +51,8 @@
         "Index en kiloWatts-heure": "Index in kilowatt-hours",
         "Puissance en Watts": "Power in Watts",
         "Puissance en kiloWatts": "Power in kilowatts",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Enter power ratings to calculate the power used by this meter",
+        "Supprimer l\\'entrée": "Delete entry",
         "Unité": "Unit",
         "Unité des données brutes": "Raw Data Unit"
     },
@@ -75,6 +82,7 @@
         "Gérer les commandes": "Manage Orders",
         "Heures pleines\/Heures creuses": "Peak hours\/Off-peak hours",
         "Identifiant": "Identifier",
+        "Identifiant transaction": "Transaction ID",
         "Informations": "Information",
         "Mes compteurs": "My counters",
         "Nom": "Name",
@@ -102,6 +110,8 @@
         "Commande info\/binaire de tarification": "Pricing info\/binary command",
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Info\/binary command defining the current pricing (1=peak hours\/0=off-peak hours)",
         "Création automatique des compteurs": "Automatic creation of counters",
+        "Forcer": "Force",
+        "Forcer la création des compteurs": "Force the creation of meters",
         "Heures pleines\/Heures creuses": "Peak hours\/Off-peak hours",
         "OCPP": "OCPP",
         "Permet de comptabiliser les consommations de chaque utilisateur": "Allows you to count the consumption of each user",
