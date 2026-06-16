@@ -1,6 +1,7 @@
 {
     "plugins\/jeeMeter\/core\/ajax\/jeeMeter.ajax.php": {
-        "401 - Accès non autorisé": "401 - Acesso não autorizado"
+        "401 - Accès non autorisé": "401 - Acesso não autorizado",
+        "Aucune méthode correspondante à": "Não há nenhum método correspondente a"
     },
     "plugins\/jeeMeter\/core\/class\/jeeMeter.class.php": {
         "Calcul de l'index": "Cálculo do índice",
@@ -10,13 +11,17 @@
         "Index": "Índice",
         "Index heures creuses": "Índice de horário fora de pico",
         "Index heures pleines": "Índice de horário de pico",
+        "Index total": "Índice total",
         "L'identifiant de l'utilisateur doit être renseigné": "O ID do usuário deve ser inserido",
-        "La commande de bascule de tarification doit être renseignée": "O comando de alternância de preços deve ser concluído"
+        "La commande de bascule de tarification doit être renseignée": "O comando de alternância de preços deve ser concluído",
+        "Puissance": "Potência"
     },
     "plugins\/jeeMeter\/desktop\/js\/jeeMeter.js": {
         "Afficher": "Mostrar",
         "Annuler": "Cancelar",
+        "Aucun compteur OCPP à créer": "Não há medidores OCPP a criar",
         "Choisir une icône": "Escolha um ícone",
+        "Compteurs OCPP créés": "Contadores OCPP criados",
         "Données à traiter": "Dados a serem processados",
         "Historiser": "Historicizar",
         "Nom de la commande": "Nome do comando",
@@ -46,6 +51,8 @@
         "Index en kiloWatts-heure": "Índice em quilowatts-hora",
         "Puissance en Watts": "Potência em Watts",
         "Puissance en kiloWatts": "Potência em quilowatts",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Indicar as potências para contabilizar a potência utilizada por este contador",
+        "Supprimer l\\'entrée": "Eliminar a entrada",
         "Unité": "Unidade",
         "Unité des données brutes": "Unidade de dados brutos"
     },
@@ -103,6 +110,8 @@
         "Commande info\/binaire de tarification": "Informações de preços\/comando binário",
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Comando info\/binário que define o preço atual (1=horário de pico\/0=horário fora de pico)",
         "Création automatique des compteurs": "Criação automática de contadores",
+        "Forcer": "Forçar",
+        "Forcer la création des compteurs": "Forçar a criação de contadores",
         "Heures pleines\/Heures creuses": "Horário de pico\/fora de pico",
         "OCPP": "OCPP",
         "Permet de comptabiliser les consommations de chaque utilisateur": "Permite contar o consumo de cada usuário",

@@ -1,6 +1,7 @@
 {
     "plugins\/jeeMeter\/core\/ajax\/jeeMeter.ajax.php": {
-        "401 - Accès non autorisé": "401 - Acceso no autorizado"
+        "401 - Accès non autorisé": "401 - Acceso no autorizado",
+        "Aucune méthode correspondante à": "No hay ningún método que coincida con"
     },
     "plugins\/jeeMeter\/core\/class\/jeeMeter.class.php": {
         "Calcul de l'index": "Cálculo del índice",
@@ -10,13 +11,17 @@
         "Index": "Índice",
         "Index heures creuses": "Índice de horas valle",
         "Index heures pleines": "Índice de horas pico",
+        "Index total": "Índice total",
         "L'identifiant de l'utilisateur doit être renseigné": "Se debe ingresar el ID de usuario",
-        "La commande de bascule de tarification doit être renseignée": "Se debe completar el comando de alternancia de precios"
+        "La commande de bascule de tarification doit être renseignée": "Se debe completar el comando de alternancia de precios",
+        "Puissance": "Potencia"
     },
     "plugins\/jeeMeter\/desktop\/js\/jeeMeter.js": {
         "Afficher": "Mostrar",
         "Annuler": "Cancelar",
+        "Aucun compteur OCPP à créer": "No hay que crear ningún contador OCPP",
         "Choisir une icône": "Elige un icono",
+        "Compteurs OCPP créés": "Contadores OCPP creados",
         "Données à traiter": "Datos a procesar",
         "Historiser": "Historizar",
         "Nom de la commande": "Nombre del comando",
@@ -46,6 +51,8 @@
         "Index en kiloWatts-heure": "Índice en kilovatios-hora",
         "Puissance en Watts": "Potencia en vatios",
         "Puissance en kiloWatts": "Potencia en kilovatios",
+        "Renseigner des puissances pour comptabiliser la puissance utilisée par ce compteur": "Introducir las potencias para contabilizar la potencia consumida por este contador",
+        "Supprimer l\\'entrée": "Eliminar la entrada",
         "Unité": "Unidad",
         "Unité des données brutes": "Unidad de datos sin procesar"
     },
@@ -75,6 +82,7 @@
         "Gérer les commandes": "Gestionar pedidos",
         "Heures pleines\/Heures creuses": "Horas pico\/valle",
         "Identifiant": "Identificador",
+        "Identifiant transaction": "Identificador de transacción",
         "Informations": "Información",
         "Mes compteurs": "Mis contadores",
         "Nom": "Nombre",
@@ -102,6 +110,8 @@
         "Commande info\/binaire de tarification": "Información de precios\/comando binario",
         "Commande info\/binaire définissant la tarification en cours (1=heures pleines\/0=heures creuses)": "Información\/comando binario que define el precio actual (1=horas pico\/0=horas valle)",
         "Création automatique des compteurs": "Creación automática de contadores",
+        "Forcer": "Forzar",
+        "Forcer la création des compteurs": "Forzar la creación de contadores",
         "Heures pleines\/Heures creuses": "Horas pico\/valle",
         "OCPP": "OCPP",
         "Permet de comptabiliser les consommations de chaque utilisateur": "Permite contar el consumo de cada usuario",

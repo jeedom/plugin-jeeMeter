@@ -3,7 +3,12 @@
 	"name": "Compteur virtuel",
 	"pluginVersion": "1.0.2",
 	"description": {
-		"fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP)."
+		"fr_FR": "Créez des compteurs énergétiques sur mesure (tarif unique ou heures pleines/heures creuses) à partir d'indexs bruts (Wh/kWh) et/ou de puissances (W/kW). Permet également de créer des compteurs liés à une identification (Personnalisé/OCPP).",
+		"en_US": "Create custom energy meters (flat rate or peak/off-peak) based on raw readings (Wh/kWh) and/or power ratings (W/kW). Also allows you to create meters linked to an identifier (Custom/OCPP).",
+		"es_ES": "Cree contadores de energía a medida (tarifa única o horas punta/horas valle) a partir de índices brutos (Wh/kWh) y/o potencias (W/kW). También permite crear contadores vinculados a una identificación (Personalizado/OCPP).",
+		"de_DE": "Erstellen Sie maßgeschneiderte Energiezähler (Einheitstarif oder Spitzen-/Nebenzeiten) auf Basis von Brutto-Zählwerten (Wh/kWh) und/oder Leistungswerten (W/kW). Ermöglicht zudem die Erstellung von Zählern, die an eine Identifikation gebunden sind (Benutzerdefiniert/OCPP).",
+		"it_IT": "Crea contatori energetici personalizzati (tariffa unica o ore di punta/ore di minor consumo) a partire da indici grezzi (Wh/kWh) e/o potenze (W/kW). Consente inoltre di creare contatori associati a un identificativo (Personalizzato/OCPP).",
+		"pt_PT": "Crie contadores de energia personalizados (tarifa única ou horário de pico/horário de vala) a partir de valores brutos (Wh/kWh) e/ou potências (W/kW). Permite também criar contadores associados a uma identificação (Personalizado/OCPP)."
 	},
 	"licence": "AGPL",
 	"author": "Jeedom SAS",
