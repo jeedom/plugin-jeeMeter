@@ -17,6 +17,9 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function jeeMeter_install() {
+	if (!file_exists(__DIR__ . '/jeeMeter_icon_alternate.png')) {
+		return;
+	}
 	if (config::byKey('mbState') == 1) {
 		$market = config::byKey('market::address');
 		if (!empty($market) && $market != 'https://market.jeedom.com') {
@@ -27,6 +30,9 @@ function jeeMeter_install() {
 }
 
 function jeeMeter_update() {
+	if (!file_exists(__DIR__ . '/jeeMeter_icon_alternate.png')) {
+		return;
+	}
 	if (config::byKey('mbState') == 1) {
 		$market = config::byKey('market::address');
 		if (!empty($market) && $market != 'https://market.jeedom.com') {
