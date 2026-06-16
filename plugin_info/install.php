@@ -18,14 +18,20 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 function jeeMeter_install() {
 	if (config::byKey('mbState') == 1) {
-		rename(__DIR__ . '/jeeMeter_icon.png', __DIR__ . '/jeeMeter_icon_default.png');
-		rename(__DIR__ . '/jeeMeter_icon_alternate.png', __DIR__ . '/jeeMeter_icon.png');
+		$market = config::byKey('market::address');
+		if (!empty($market) && $market != 'https://market.jeedom.com') {
+			rename(__DIR__ . '/jeeMeter_icon.png', __DIR__ . '/jeeMeter_icon_default.png');
+			rename(__DIR__ . '/jeeMeter_icon_alternate.png', __DIR__ . '/jeeMeter_icon.png');
+		}
 	}
 }
 
 function jeeMeter_update() {
 	if (config::byKey('mbState') == 1) {
-		rename(__DIR__ . '/jeeMeter_icon.png', __DIR__ . '/jeeMeter_icon_default.png');
-		rename(__DIR__ . '/jeeMeter_icon_alternate.png', __DIR__ . '/jeeMeter_icon.png');
+		$market = config::byKey('market::address');
+		if (!empty($market) && $market != 'https://market.jeedom.com') {
+			rename(__DIR__ . '/jeeMeter_icon.png', __DIR__ . '/jeeMeter_icon_default.png');
+			rename(__DIR__ . '/jeeMeter_icon_alternate.png', __DIR__ . '/jeeMeter_icon.png');
+		}
 	}
 }
